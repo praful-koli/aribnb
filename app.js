@@ -10,6 +10,8 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+
+// MongoBD Connection
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 async function main() {
   await mongoose.connect(MONGO_URL);
@@ -23,8 +25,9 @@ app.get("/", (req, res) => {
 });
 
 // create Route
-app.get("/listings/createNew", (req, res) => {
-  res.render("listings/createNew");
+
+app.get("/listings/new", (req, res) => {
+  res.render("listings/new");
 });
 
 
@@ -32,7 +35,7 @@ app.get("/listings/createNew", (req, res) => {
 app.get("/listings", async (req, res) => {
   try {
     const allListing = await Listing.find();
-    console.log(allListing);
+    // console.log(allListing);
     res.render("listings/index", { allListing });
   } catch (error) {
     console.log(error);
@@ -50,6 +53,7 @@ app.get("/listings/:id", async (req, res) => {
     console.log(error);
   }
 });
+
 
 app.listen(port, () => {
   console.log(`server listeing to port ${port}`);
