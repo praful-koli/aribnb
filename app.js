@@ -4,12 +4,11 @@ const mongoose = require("mongoose");
 const Listing = require("./models/listing");
 const path = require("path");
 const port = 8080;
-
+const methodOverride = require("method-override");
 app.use(express.urlencoded({ extended: true }));
-
+app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-
 
 // MongoBD Connection
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
@@ -24,18 +23,16 @@ app.get("/", (req, res) => {
   res.send("isworking");
 });
 
-// create Route
+// New Route
 
 app.get("/listings/new", (req, res) => {
   res.render("listings/new");
 });
 
-
 // index Route
 app.get("/listings", async (req, res) => {
   try {
     const allListing = await Listing.find();
-    // console.log(allListing);
     res.render("listings/index", { allListing });
   } catch (error) {
     console.log(error);
@@ -54,28 +51,41 @@ app.get("/listings/:id", async (req, res) => {
   }
 });
 
+// Create Route
 
+app.post("/listings", async (req, res) => {
+  try {
+    const listing = new Listing(req.body.listing);
+    await listing.save();
+    res.redirect("/listings");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+//  edit route
+app.get("/listings/:id/edit", async (req, res) => {
+  const { id } = req.params;
+  const listing = await Listing.findById(id);
+  console.log(listing);
+  res.render("listings/edit", { listing });
+});
+
+// Update route
+
+app.put("/listings/:id", async (req, res) => {
+  let { id } = req.params;
+  await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+  res.redirect("/listings");
+});
+
+// Delete Route
+
+app.delete("/listings/:id", async (req, res) => {
+  let { id } = req.params;
+  await Listing.findByIdAndDelete(id);
+  res.redirect("/listings");
+});
 app.listen(port, () => {
   console.log(`server listeing to port ${port}`);
 });
-
-
-
-
-// app.get('/testListing' , async (req, res) => {
-//    let sampleListing = new Listing({
-//      title : "My New Villa",
-//      description : "By the beach",
-//      price : 12000,
-//      location : "Calangute, Goa",
-//      country : "India"
-//    });
-
-//   await sampleListing.save()
-//    .then((response)=> {
-
-//     console.log("Data is save " , response );
-//     res.send('is working')
-//    })
-//    .catch((error) => console.log(error));
-// });
