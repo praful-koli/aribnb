@@ -5,10 +5,16 @@ const Listing = require("./models/listing");
 const path = require("path");
 const port = 8080;
 const methodOverride = require("method-override");
+const ejsMate  = require('ejs-mate');
+
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, "/public")));
+app.engine('ejs', ejsMate);
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
 
 // MongoBD Connection
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
@@ -30,6 +36,7 @@ app.get("/listings/new", (req, res) => {
 });
 
 // index Route
+
 app.get("/listings", async (req, res) => {
   try {
     const allListing = await Listing.find();
@@ -64,6 +71,7 @@ app.post("/listings", async (req, res) => {
 });
 
 //  edit route
+
 app.get("/listings/:id/edit", async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
