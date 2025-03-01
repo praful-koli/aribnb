@@ -55,6 +55,7 @@ app.get("/listings/:id", async (req, res) => {
     res.render("listings/show", { listing });
   } catch (error) {
     console.log(error);
+    
   }
 });
 
