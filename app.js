@@ -54,8 +54,7 @@ app.get("/listings/:id", async (req, res) => {
     const listing = await Listing.findById(id.trim());
     res.render("listings/show", { listing });
   } catch (error) {
-    console.log(error);
-    
+    console.log(error); 
   }
 });
 
