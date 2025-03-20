@@ -1,13 +1,17 @@
 
 <% layout('layouts/boilerplate') -%>
+
 <body>
     <h3>All Listings</h3>
-    <form action='http://localhost:8080/listings/new' method="get">
+    <!-- <form action='http://localhost:8080/listings/new' method="get">
         <button type="submit">New Listing</button>
-    </form>
+    </form> -->
     <ul>
         <% allListing.forEach(listing=> { %>
             <li><a href="/listings/<%= listing._id %>">
+                    <%= listing.title %>
+                </a></li>
+                <li><a href="/listings/<%= listing._id %>">
                     <%= listing.title %>
                 </a></li>
             <% }) %>

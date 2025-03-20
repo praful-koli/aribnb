@@ -25,8 +25,11 @@ main()
   .then((response) => console.log("Database Connection succesful 👍🧑‍💻"))
   .catch((err) => console.log(err));
 
+
+
+// Home route
 app.get("/", (req, res) => {
-  res.send("isworking");
+  res.send("is working");
 });
 
 // New Route
